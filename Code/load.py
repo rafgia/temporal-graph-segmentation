@@ -32,7 +32,7 @@ def load_graph(file,header,sep):
       timestamp2id[timestamps[i]] = i
 
     #all (unique) non-temporal edges in the graph
-    #'edges' is an #array mapping edgeIDs (array indices) to actual edges (array values)
+    #'edges' is an array mapping edgeIDs (array indices) to actual edges (array values)
     edges = set()
     for e in temporal_edges:
       nontemporal_e = (node2id[e[0]],node2id[e[1]])
@@ -75,7 +75,8 @@ def load_graph(file,header,sep):
         temporal_dict[e[2]] = []
       temporal_dict[e[2]].append((e[0],e[1]))
     
-    new_temporal_dict = {} #to rescale the timestamps
+    #to rescale the timestamps
+    new_temporal_dict = {} 
     new_id = 0
     for i in temporal_dict:
       new_temporal_dict[new_id] = temporal_dict[i]

@@ -6,7 +6,7 @@ from auxiliary import compute_a_auxiliary_structure
 
 def topdown_greedy_segmentation(a_aux,timestamp2edges,nsegments):
   ntimestamps = len(timestamp2edges)
-  first_segment = (0,ntimestamps-1) #entire temporal sequence
+  first_segment = (0,ntimestamps-1)
   segment2penalty = {first_segment:segment_penalty(a_aux,timestamp2edges,first_segment[0],first_segment[1])}
   segment2bestsplit = {}
   segments_to_be_split = {first_segment}
@@ -23,11 +23,12 @@ def topdown_greedy_segmentation(a_aux,timestamp2edges,nsegments):
 
         valid_edges1 = set()
         valid_edges2 = _edges_in_time_interval(timestamp2edges,cst1,cst2)
-        for k in range(cst1,cst2): #try all the possible splits of current_segment
+        for k in range(cst1,cst2):
           #compute valid edge sets for the current split (based on which penalties are computed)
           for edge in timestamp2edges[k]:
             valid_edges1.add(edge)
-            if a_aux[k][edge] == a_aux[cst2][edge]: #it means that 'edge' is not present in time interval [k+1,cst2]
+            #it means that 'edge' is not present in time interval [k+1,cst2]
+            if a_aux[k][edge] == a_aux[cst2][edge]: 
               valid_edges2.remove(edge)
 
           penalty1 = segment_penalty_given_validedges(a_aux,valid_edges1,cst1,k)
@@ -74,15 +75,11 @@ def topdown_greedy_segmentation(a_aux,timestamp2edges,nsegments):
 
 if __name__ == '__main__':
   start = datetime.now()    
-  nodes,node2id,timestamps,timestamp2id,edges,edge2id,timestamp2edges,snapshots, temporal_dict, new_temporal_dict = load_graph("C:/Users/Utente/Desktop/Temporal-SIR-GN-main/Experiments_with_datasets/ia-hospital-ward-proximity_compressed.csv", True,',')
+  nodes,node2id,timestamps,timestamp2id,edges,edge2id,timestamp2edges,snapshots, temporal_dict, new_temporal_dict = load_graph("graph_path.csv/txt", True,',')
   a_aux = compute_a_auxiliary_structure(len(edges),len(timestamps),timestamp2edges)
   nsegments = 6001
   segments, overall_penalty, segment2penalty, current_time = topdown_greedy_segmentation(a_aux,timestamp2edges,nsegments)
   print("Timestamps: ", len(timestamps), "Nodes: ",len(nodes)," Edges: ",len(edges))
-  #print(segments)
-  #for segment in segments:
-    #print("len of ", segment, len(_edges_in_time_interval(timestamp2edges, segment[0],segment[1])))
   print("penalty", overall_penalty)
-  #print(segment2penalty)
   end = datetime.now()
   print ("Time: ", (end-start))

@@ -33,14 +33,9 @@ def compression_neighborhoods_per_node(temporal_dict):
                     node_neighborhood_freq[node] = {node_neighborhood: 1}
     node_compression = {}
     for node, neighborhoods in node_neighborhood_freq.items():
-        #print(f"Node {node}:")
         count = 0
         for neighborhood, freq in neighborhoods.items():
-            
-            #if freq > 1 and len(neighborhood)>0:
-                #print(f"  Neighborhood {neighborhood}: Repeated {freq} times")
             count += freq 
-        #print(count)
         node_compression[node] = count/len(temporal_dict)
     return node_compression
 
@@ -65,7 +60,7 @@ def dict_to_csv(data, filename):
                 csvwriter.writerow([edge[0], edge[1], time])
 
 
-nodes,node2id,timestamps,timestamp2id,edges,edge2id,timestamp2edges,snapshots,temporal_dict, new_temporal_dict = load_graph("C:/Users/Utente/Desktop/Temporal-SIR-GN-main/Experiments_with_datasets/temp_brazilAir.txt", True,',')
+nodes,node2id,timestamps,timestamp2id,edges,edge2id,timestamp2edges,snapshots,temporal_dict, new_temporal_dict = load_graph("graph_path.txt/csv", True,',')
 #compressed_temporal_dict, compressed_value = compression_on_snapshots(new_temporal_dict)
 #node_compression = compression_on_nodes(new_temporal_dict)
 #print ("Compression ratio: ",compressed_value)
