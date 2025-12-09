@@ -1,22 +1,31 @@
-def hamming(timestamp2edges,timestamp2id,piecewise):
-  #create a dict where the key is the pair of edges and the value is the count
-  hamming_consensus_vectors = []
-  for piece in piecewise:
-    hamming = []
-    non_temporal_edges = []
-    edges_in_piece = {}
-    for snap in piece:
-      #take the edge in the selected timestamp passing through id in timestamp2edges
-      edges = timestamp2edges[timestamp2id[snap]][0] 
-      if edges not in non_temporal_edges:
-        non_temporal_edges.append(edges)
-        edges_in_piece[(edges)] = 1
-      else:
-        #count the occurence of edge
-        edges_in_piece[edges] += 1 
-    for key,value in edges_in_piece.items():
-      #the condition is that we take the edge only if the value is greater than half the len of the snap
-      if value > (len(timestamp2edges)/2): 
-        hamming.append(key)
-    hamming_consensus_vectors.append(hamming)
-  return hamming_consensus_vectors
+def hamming(timestamp2edges, timestamp2id, piecewise):
+    """
+    Compute Hamming consensus vectors for piecewise aggregated snapshots.
+
+    For each piece (list of timestamps):
+    - Count how many times each edge appears in the piece.
+    - Only include edges that appear more than half of the snapshots in the piece.
+    
+    Returns a list of lists of edges for each piece.
+    """
+    hamming_consensus_vectors = []
+
+    for piece in piecewise:
+        edges_in_piece = {}  # dict to count edge occurrences
+        for snap in piece:
+            # Get edges in the snapshot
+            edges_list = timestamp2edges[timestamp2id[snap]][0]
+            # Convert to tuple to use as dict key
+            edges_key = tuple(edges_list)
+            # Count occurrence
+            if edges_key not in edges_in_piece:
+                edges_in_piece[edges_key] = 1
+            else:
+                edges_in_piece[edges_key] += 1
+        # Build consensus vector: only edges appearing more than half of the piece
+        hamming_piece = []
+        for key, value in edges_in_piece.items():
+            if value > len(piece) / 2:
+                hamming_piece.append(list(key))
+        hamming_consensus_vectors.append(hamming_piece)
+    return hamming_consensus_vectors

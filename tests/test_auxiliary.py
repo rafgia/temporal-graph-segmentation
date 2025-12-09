@@ -40,8 +40,9 @@ def test_hamming():
     }
     timestamp2id = {i:i for i in range(4)}
     piecewise = [[0,1],[2,3]]
-    # Each edge occurs only once; half of 4 = 2, so none pass threshold
-    assert hamming(timestamp2edges, timestamp2id, piecewise) == [[], []]
+    expected = [[], []]  # if function filters edges correctly based on threshold
+
+    assert hamming(timestamp2edges, timestamp2id, piecewise) == expected
 
 def test_segment_penalty_given_validedges():
     a_aux = [
