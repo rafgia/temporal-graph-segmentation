@@ -23,4 +23,3 @@ if __name__ == '__main__':
   #print ("Hamming consensus vector: ", hamming_consensus_vectors = hamming(timestamp2edges,timestamp2id,piecewise))
   print ("Time: ", (end - start))
   print(piecewise[0])
-  

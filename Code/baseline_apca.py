@@ -7,6 +7,9 @@ from auxiliary import compute_a_auxiliary_structure
 import matplotlib.pyplot as plt
 
 def extract_edges(snapshot):
+    """
+    Extract the set of undirected edges from a snapshot adjacency structure.
+    """
     edge_set = set()
     for u in snapshot:
         for v in snapshot[u]:
@@ -14,6 +17,10 @@ def extract_edges(snapshot):
     return edge_set
 
 def compute_hamming_distances(snapshots):
+    """
+    Compute Hamming distances between consecutive graph snapshots.
+    The Hamming distance is defined as the number of edges that differ between two consecutive snapshots.
+    """
     distances = []
     for i in range(1, len(snapshots)):
         edges_prev = extract_edges(snapshots[i - 1])
@@ -23,6 +30,11 @@ def compute_hamming_distances(snapshots):
     return distances
 
 def estimate_threshold(snapshots, alpha=1.5):
+    """
+    Estimate an adaptive threshold for detecting segment boundaries in temporal graph snapshots.
+    The threshold is computed as:
+        mean(Hamming distances) + alpha * std(Hamming distances)
+    """
     distances = compute_hamming_distances(snapshots)
     values = [d for _, d in distances]
     mean_val = sum(values) / len(values)
@@ -30,6 +42,10 @@ def estimate_threshold(snapshots, alpha=1.5):
     return mean_val + alpha * std_val
 
 def segment_snapshots_adaptive(snapshots, threshold):
+    """
+    Segment temporal snapshots into groups based on an adaptive threshold.
+    A new segment is created whenever the Hamming distance between two consecutive snapshots exceeds the given threshold.
+    """
     segments = []
     current_segment = [0]
 
@@ -56,19 +72,15 @@ if __name__ == '__main__':
         True, 
         ','
     )
-
     # Estimate threshold
     threshold = estimate_threshold(snapshots, alpha=1.5)
-
     # Segment based on estimated threshold
     segments = segment_snapshots_adaptive(snapshots, threshold)
-
     # Compute total penalty
     a_aux = compute_a_auxiliary_structure(len(edges), len(timestamps), timestamp2edges)
     sum_penalties = sum(
         segment_penalty(a_aux, timestamp2edges, segment[0], segment[-1]) for segment in segments
     )
-
     end = datetime.now()
 
     # Output
@@ -76,3 +88,4 @@ if __name__ == '__main__':
     print(f"Number of segments: {len(segments)}")
     print(f"Total penalty: {sum_penalties:.2f}")
     print(f"Execution time: {end - start}")
+    

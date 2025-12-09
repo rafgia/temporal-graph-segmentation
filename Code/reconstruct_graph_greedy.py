@@ -1,3 +1,5 @@
+import numpy as np
+
 def generate_compressed_graph_greedy(temporal_dictionary, Rec_all, edge_dictionary):
 
   #gets the list of each snapshot

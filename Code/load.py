@@ -84,3 +84,4 @@ def load_graph(file,header,sep):
 
 
     return nodes,node2id,timestamps,timestamp2id,edges,edge2id,timestamp2edges,snapshots, temporal_dict, new_temporal_dict
+  
